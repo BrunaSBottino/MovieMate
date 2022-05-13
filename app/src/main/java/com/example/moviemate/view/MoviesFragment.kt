@@ -19,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MoviesFragment : Fragment() {
 
-    private val viewModel : MainViewModel by sharedViewModel()
+    private val viewModel: MainViewModel by sharedViewModel()
 
     private var _binding: FragmentMoviesBinding? = null
 
@@ -50,9 +50,12 @@ class MoviesFragment : Fragment() {
                         return super.scrollVerticallyBy(dy, recycler, state)
                     }
                 }
-            viewModel.getMovies(page) {
-                adapter = MovieAdapter(viewModel.movieList.value, this@MoviesFragment)
-            }
+            viewModel.getMovies(
+                page = page,
+                doAfter = {
+                    binding.RecyclerViewMovie.adapter =
+                        MovieAdapter(viewModel.movieList.value, this@MoviesFragment)
+                })
         }
         binding.editText.doAfterTextChanged {
             updateRecyclerViewWithSearch(binding.editText.text.toString())
@@ -62,30 +65,35 @@ class MoviesFragment : Fragment() {
 
     private fun updateRecyclerViewWithSearch(search: String) {
         page = 1
-        viewModel.searchMovie(search){
-            if(recyclerView.adapter is MovieAdapter){
-                (recyclerView.adapter as MovieAdapter).makeSearch(viewModel.movieList.value)
+        viewModel.searchMovie(
+            search = search,
+            doAfter = {
+                if (recyclerView.adapter is MovieAdapter) {
+                    (recyclerView.adapter as MovieAdapter).makeSearch(viewModel.movieList.value)
+                }
             }
-        }
+        )
     }
+
 
     private fun updateRecyclerView() {
         page++
-        viewModel.getMovies(page) {
-            if (recyclerView.adapter is MovieAdapter) {
-                (recyclerView.adapter as MovieAdapter).updateMovieList(viewModel.movieList.value)
-            }
-        }
+        viewModel.getMovies(
+            page = page,
+            doAfter = {
+                if (recyclerView.adapter is MovieAdapter) {
+                    (recyclerView.adapter as MovieAdapter).updateMovieList(viewModel.movieList.value)
+                }
+            })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding=null
+        _binding = null
     }
 
     fun goToDetailsFragment(movie: Movie) {
         viewModel.selectedMovie.value = movie
-        Log.d("TAG", "viewModels selected movie value : ${viewModel.selectedMovie.value} ")
         Navigation.findNavController(binding.root).navigate(R.id.goToDetailsFragment)
     }
 

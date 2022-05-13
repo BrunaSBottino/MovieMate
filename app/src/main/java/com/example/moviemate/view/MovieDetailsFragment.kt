@@ -25,11 +25,6 @@ class MovieDetailsFragment : Fragment() {
     ): View? {
          _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
         val movie = viewModel.selectedMovie.value
-        Log.d("TAG", "selected movie: ${viewModel.selectedMovie.value}")
-        Log.d("TAG", "selected movie: ${viewModel.selectedMovie.value}")
-        Log.d("TAG", "selected movie: ${viewModel.selectedMovie.value}")
-        Log.d("TAG", "selected movie: ${viewModel.selectedMovie.value}")
-        Log.d("TAG", "selected movie: ${viewModel.selectedMovie.value}")
         binding.run {
             val posterPathAdjusted = "https://image.tmdb.org/t/p/original${movie?.poster_path}"
             Glide.with(requireContext()).load(posterPathAdjusted).into(detailsPoster)

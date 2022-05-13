@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviemate.model.Movie
 import com.example.moviemate.network.RetrofitInstance
+import com.example.moviemate.view.MovieAdapter
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -28,8 +29,11 @@ class MainViewModel: ViewModel() {
             Log.d("TAG", "response is successful ? ${response.isSuccessful}")
             Log.d("TAG", "response code ${response.code()}")
             Log.d("TAG", "response body ${response.body()}")
+            Log.d("TAG", "response body ${response.body()!!.results.size}")
             Log.d("TAG", "response body ${response.raw()}")
             doAfter()
+//            binding.RecyclerViewMovie.adapter =
+//                MovieAdapter(viewModel.movieList.value, this@MoviesFragment)
         }
     }
 
