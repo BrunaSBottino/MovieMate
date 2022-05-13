@@ -47,7 +47,6 @@ class MainViewModel: ViewModel() {
             if(response.isSuccessful && response.body()!=null){
                 movieList.value = response.body()!!.results
             }
-            Log.d("TAG", "response is successful ? ${response.isSuccessful}")
             Log.d("TAG", "response code ${response.code()}")
             Log.d("TAG", "response body ${response.body()}")
             Log.d("TAG", "response body ${response.raw()}")
