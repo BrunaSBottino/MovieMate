@@ -1,7 +1,7 @@
 # Movie Mate
 
 Movie Mate é um aplicativo responsável pela exibição de uma lista de filmes que já foram ou serão lançados no mundo do cinema.
-Nele você encontra informações como sinopse e ano de lançamento do filme.
+/nNele você encontra informações como sinopse e ano de lançamento do filme.
 
 ## Tecnologias utilizadas
 
