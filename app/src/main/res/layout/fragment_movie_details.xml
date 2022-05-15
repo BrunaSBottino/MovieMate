@@ -8,14 +8,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".view.MovieDetailsFragment">
+        tools:context=".view.MovieDetailsFragment"
+        android:background="@color/secondaryDarkColor"
+        >
 
 
         <ImageView
             android:id="@+id/detailsPoster"
-            android:layout_width="match_parent"
+            android:layout_width="320dp"
             android:layout_height="400dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/shape_poster"
+            android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -26,12 +32,25 @@
             android:layout_marginTop="28dp"
             android:textAlignment="center"
             android:textSize="30sp"
-            android:textColor="@color/black"
             android:fontFamily="@font/caviar_dreams_bold"
+            android:textColor="@color/primaryTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detailsPoster"
             tools:text="Minha mae e uma peca" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/detailsDescription"
+            app:layout_constraintTop_toBottomOf="@+id/detailsTitle"
+            android:textAlignment="center"
+            android:textColor="@color/primaryLightColor"
+            android:textSize="16sp"
+            android:fontFamily="@font/caviar_dreams_bold"
+            android:text="2010"/>
 
         <TextView
             android:id="@+id/detailsDescription"
@@ -40,9 +59,9 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="20dp"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/primaryTextColor"
             android:textSize="20sp"
-            android:fontFamily="@font/caviar_dreams_bold"
+            android:fontFamily="@font/caviar_dreams_basic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detailsTitle"
             tools:text="Minha mae e uma peca" />

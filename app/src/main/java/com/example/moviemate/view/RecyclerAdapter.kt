@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.moviemate.databinding.ItemMovieBinding
 import com.example.moviemate.model.Movie
-import com.google.android.material.imageview.ShapeableImageView
-import com.google.android.material.shape.CornerFamily
+import com.example.moviemate.network.NetworkUtils
 
 class MovieAdapter(var movies: List<Movie>?, val fragment: Fragment) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
@@ -57,15 +56,15 @@ class MovieAdapter(var movies: List<Movie>?, val fragment: Fragment) :
         if (movies != null) {
             val movie = movies!![position]
             holder.binding.run {
-                val posterPathAdjusted = "https://image.tmdb.org/t/p/original${movie.poster_path}"
-                Glide.with(this.root).load(posterPathAdjusted).into(poster)
+                val posterPath = NetworkUtils.getCompletePosterPath(movie.poster_path)
+                Glide.with(this.root).load(posterPath).into(poster)
                 textViewTitle.text = movie.original_title
                 textViewPremiere.text = movie.release_date
+                root.setOnClickListener {
+                    if (fragment is MoviesFragment)
+                        fragment.goToDetailsFragment(movie)
+                }
                 poster.apply {
-                    setOnClickListener {
-                        if (fragment is MoviesFragment)
-                            fragment.goToDetailsFragment(movie)
-                    }
                     poster.clipToOutline = true
                     poster.scaleType = ImageView.ScaleType.FIT_XY
                 }

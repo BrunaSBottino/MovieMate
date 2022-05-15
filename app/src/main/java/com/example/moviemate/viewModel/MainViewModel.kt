@@ -5,15 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviemate.model.Movie
+import com.example.moviemate.network.Repository
 import com.example.moviemate.network.RetrofitInstance
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class MainViewModel: ViewModel() {
+class MainViewModel(val repository: Repository) : ViewModel() {
 
     val page = MutableLiveData(0)
 
-    val movieList= MutableLiveData<List<Movie>>()
+    val movieList = MutableLiveData<List<Movie>>()
 
     val selectedMovie = MutableLiveData<Movie>()
 
@@ -23,38 +24,38 @@ class MainViewModel: ViewModel() {
 
     fun getMovies(doAfter: () -> Unit) {
         viewModelScope.launch {
-            page.value = page.value?.plus(1)
-            apiCalls.value = apiCalls.value?.plus(1)
-            loading.value = true
-            val response = try {
-                RetrofitInstance.api.getUpComingMovies(page.value!!)
-            } catch (e: IOException){
+            try {
+                page.value = page.value?.plus(1)
+                loading.value = true
+                val response = repository.loadMovies(page.value!!)
+                if (response.isSuccessful && response.body() != null) {
+                    movieList.value = response.body()!!.results
+                }
+                Log.d("TAG", "response is successful ? ${response.isSuccessful}")
+                Log.d("TAG", "calls : ${apiCalls.value}")
+                loading.value = false
+                doAfter()
+            } catch (e: Exception) {
+                Log.i("TAG", "getMovies: ${e.message}")
                 return@launch
             }
-            if(response.isSuccessful && response.body()!=null){
-                movieList.value = response.body()!!.results
-            }
-            Log.d("TAG", "response is successful ? ${response.isSuccessful}")
-            Log.d("TAG", "calls : ${apiCalls.value}")
-            loading.value = false
-            doAfter()
         }
     }
 
-    fun searchMovie(search:String, doAfter: () -> Unit) {
+    fun searchMovie(search: String, doAfter: () -> Unit) {
         viewModelScope.launch {
-            page.value = page.value?.plus(1)
-            loading.value = true
-            val response = try {
-                RetrofitInstance.api.getSpecificMovie(page.value!!,search)
-            } catch (e: IOException){
+            try {
+                page.value = page.value?.plus(1)
+                loading.value = true
+                val response = repository.getSpecificMovie(page.value!!, search)
+                if (response.isSuccessful && response.body() != null) {
+                    movieList.value = response.body()!!.results
+                }
+                loading.value = false
+                doAfter()
+            }catch (e: Exception){
                 return@launch
             }
-            if(response.isSuccessful && response.body()!=null){
-                movieList.value = response.body()!!.results
-            }
-            loading.value = false
-            doAfter()
         }
     }
 

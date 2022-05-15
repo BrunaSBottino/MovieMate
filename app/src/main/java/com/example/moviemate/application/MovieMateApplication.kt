@@ -1,6 +1,7 @@
 package com.example.moviemate.application
 
 import android.app.Application
+import com.example.moviemate.di.networkModule
 import com.example.moviemate.di.viewModelsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -13,7 +14,7 @@ class MovieMateApplication: Application() {
         startKoin {
             androidLogger()
             androidContext(this@MovieMateApplication)
-            modules(viewModelsModule)
+            modules(viewModelsModule, networkModule)
         }
     }
 

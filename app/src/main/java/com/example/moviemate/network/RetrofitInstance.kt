@@ -8,7 +8,7 @@ object RetrofitInstance {
 
     val api : MovieApi by lazy {
         Retrofit.Builder()
-            .baseUrl(Credentials.BASE_URL)
+            .baseUrl(NetworkUtils.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create()

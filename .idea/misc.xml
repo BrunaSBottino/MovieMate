@@ -11,8 +11,8 @@
         <entry key="app/src/main/res/drawable/shape_poster.xml" value="0.16" />
         <entry key="app/src/main/res/layout-v31/item_movie.xml" value="0.18229166666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_movie_details.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_movies.xml" value="0.2625" />
+        <entry key="app/src/main/res/layout/fragment_movie_details.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_movies.xml" value="0.5" />
         <entry key="app/src/main/res/layout/item_movie.xml" value="0.5418326693227091" />
       </map>
     </option>

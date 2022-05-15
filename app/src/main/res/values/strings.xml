@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Movie Mate</string>
-    <string name="search_your_movie">Escolha seu filme:</string>
+    <string name="search_your_movie">Search...</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="movies_search_hint">Pesquise seu filme</string>
