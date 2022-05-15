@@ -1,5 +1,6 @@
 package com.example.moviemate.network
 
+import com.example.moviemate.model.Genres
 import com.example.moviemate.model.MultiMovie
 import retrofit2.Call
 import retrofit2.Response
@@ -12,7 +13,6 @@ interface MovieApi {
     suspend fun getUpComingMovies(@Query("page")page: Int): Response<MultiMovie>
 
     @GET("/3/search/movie?api_key=${Credentials.API_KEY}")
-    suspend fun getSpecificMovie(@Query("query")search: String): Response<MultiMovie>
-//https://api.themoviedb.org/3/movie/upcoming?api_key=f321a808e68611f41312aa8408531476&page=1
-//https://api.themoviedb.org/movie/upcoming?api_key=f321a808e68611f41312aa8408531476
+    suspend fun getSpecificMovie(@Query("page")page: Int, @Query("query") search: String): Response<MultiMovie>
+
 }

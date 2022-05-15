@@ -2,48 +2,48 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp">
+    android:layout_margin="2dp"
+    tools:background="@color/secondaryDarkColor">
 
     <ImageView
         android:id="@+id/poster"
-        android:layout_width="120dp"
+        android:layout_width="110dp"
         android:layout_height="150dp"
-        android:layout_margin="20dp"
+        android:src="@drawable/avengers"
+        android:background="@drawable/shape_poster"
+        android:scaleType="fitXY"
+        android:layout_margin="6dp"
+        android:layout_marginVertical="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/avengers" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:textSize="20sp"
-        android:text="Avengers: The Ultimate"
+        android:layout_margin="8dp"
+        tools:text="Avengers: The Ultimate"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="18sp"
+        android:fontFamily="@font/caviar_dreams_bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/poster"
         app:layout_constraintTop_toTopOf="@+id/poster" />
-
-    <TextView
-        android:id="@+id/textViewGenre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Genero"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/textViewTitle"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
     <TextView
         android:id="@+id/textViewPremiere"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/caviar_dreams_basic"
+        android:textColor="@color/primaryTextColor"
         android:textSize="16sp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintStart_toEndOf="@+id/textViewGenre"
-        app:layout_constraintTop_toTopOf="@+id/textViewGenre"
-        android:text="Lançamento" />
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/textViewTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
+        tools:text="Lançamento" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

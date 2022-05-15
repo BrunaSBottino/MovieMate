@@ -2,16 +2,20 @@ package com.example.moviemate.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.moviemate.databinding.ItemMovieBinding
 import com.example.moviemate.model.Movie
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.shape.CornerFamily
 
 class MovieAdapter(var movies: List<Movie>?, val fragment: Fragment) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    fun updateMovieList(newMovieList: List<Movie>?) {
+
+    fun addMovies(newMovieList: List<Movie>?) {
         if (newMovieList != null) {
             movies = getSumOf(movies, newMovieList)
             notifyDataSetChanged()
@@ -23,6 +27,11 @@ class MovieAdapter(var movies: List<Movie>?, val fragment: Fragment) :
             movies = searchResults
             notifyDataSetChanged()
         }
+    }
+
+    fun clear() {
+        movies = listOf()
+        notifyDataSetChanged()
     }
 
     private fun getSumOf(movies: List<Movie>?, newMovieList: List<Movie>): List<Movie> {
@@ -52,9 +61,13 @@ class MovieAdapter(var movies: List<Movie>?, val fragment: Fragment) :
                 Glide.with(this.root).load(posterPathAdjusted).into(poster)
                 textViewTitle.text = movie.original_title
                 textViewPremiere.text = movie.release_date
-                poster.setOnClickListener {
-                    if (fragment is MoviesFragment)
-                        fragment.goToDetailsFragment(movie)
+                poster.apply {
+                    setOnClickListener {
+                        if (fragment is MoviesFragment)
+                            fragment.goToDetailsFragment(movie)
+                    }
+                    poster.clipToOutline = true
+                    poster.scaleType = ImageView.ScaleType.FIT_XY
                 }
             }
         }

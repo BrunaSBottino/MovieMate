@@ -15,7 +15,6 @@ import com.example.moviemate.databinding.FragmentMoviesBinding
 import com.example.moviemate.model.Movie
 import com.example.moviemate.viewModel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MoviesFragment : Fragment() {
 
@@ -25,71 +24,100 @@ class MoviesFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val recyclerView: RecyclerView by lazy {
-        binding.RecyclerViewMovie
-    }
-
-    private var page = 1
+    private var movieAdapter = MovieAdapter(null, this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        Log.i("TAG", "onCreateView: created view")
         _binding = FragmentMoviesBinding.inflate(inflater, container, false)
         binding.RecyclerViewMovie.apply {
-            layoutManager =
-                object : LinearLayoutManager(context, RecyclerView.VERTICAL, false) {
-                    override fun scrollVerticallyBy(
-                        dy: Int,
-                        recycler: RecyclerView.Recycler?,
-                        state: RecyclerView.State?
-                    ): Int {
-                        if ((findLastCompletelyVisibleItemPosition() + 1) % 20 == 0) {
-                            updateRecyclerView()
+
+            val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+            layoutManager = linearLayoutManager
+            adapter = movieAdapter
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    if (dy > 0) { //check for scroll down
+                        if (viewModel.loading.value == false) {
+                            val visibleItemCount = linearLayoutManager.childCount; // 3
+                            val totalItemCount = linearLayoutManager.itemCount; // 20
+                            val pastVisiblesItems =
+                                linearLayoutManager.findFirstVisibleItemPosition(); // 17
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                val search = binding.editText.text.toString()
+                                if(search!=""){
+                                    loadMoreSearch(search)
+                                    Log.i("TAG", "chamou mais da pesquisa ${viewModel.page.value}")
+                                }else{
+                                    loadMoreMovies()
+                                }
+                            }
                         }
-                        return super.scrollVerticallyBy(dy, recycler, state)
                     }
                 }
-            viewModel.getMovies(
-                page = page,
-                doAfter = {
-                    binding.RecyclerViewMovie.adapter =
-                        MovieAdapter(viewModel.movieList.value, this@MoviesFragment)
-                })
+            })
         }
-        binding.editText.doAfterTextChanged {
-            updateRecyclerViewWithSearch(binding.editText.text.toString())
+        binding.editText.apply{
+            doAfterTextChanged {
+                val search = binding.editText.text.toString()
+                if(search != "") {
+                    startSearch(search)
+                }else{
+                    loadAfterClear()
+                }
+            }
+        }
+        if(viewModel.movieList.value.isNullOrEmpty()) {
+            loadMoreMovies()
         }
         return binding.root
     }
 
-    private fun updateRecyclerViewWithSearch(search: String) {
-        page = 1
+    private fun loadAfterClear() {
+        movieAdapter.clear()
+        viewModel.page.value = 0
+        loadMoreMovies()
+    }
+
+    private fun startSearch(search: String) {
+        viewModel.page.value = 0
         viewModel.searchMovie(
             search = search,
-            doAfter = {
-                if (recyclerView.adapter is MovieAdapter) {
-                    (recyclerView.adapter as MovieAdapter).makeSearch(viewModel.movieList.value)
-                }
-            }
+            doAfter = { updateRecyclerView(Action.NEW_SEARCH) }
         )
     }
 
-
-    private fun updateRecyclerView() {
-        page++
-        viewModel.getMovies(
-            page = page,
-            doAfter = {
-                if (recyclerView.adapter is MovieAdapter) {
-                    (recyclerView.adapter as MovieAdapter).updateMovieList(viewModel.movieList.value)
-                }
-            })
+    private fun loadMoreSearch(search: String){
+        viewModel.searchMovie(
+            search = search,
+            doAfter = { updateRecyclerView(Action.LOAD_MORE) }
+        )
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun loadMoreMovies() {
+        viewModel.getMovies(
+            doAfter = { updateRecyclerView(Action.LOAD_MORE) }
+        )
+    }
+
+    fun updateRecyclerView(action: Action) {
+        movieAdapter.run {
+            when(action){
+                Action.LOAD_MORE -> addMovies(viewModel.movieList.value)
+                Action.NEW_SEARCH -> makeSearch(viewModel.movieList.value)
+            }
+        }
+    }
+
+    enum class Action {
+        NEW_SEARCH,
+        LOAD_MORE
     }
 
     fun goToDetailsFragment(movie: Movie) {
@@ -97,4 +125,8 @@ class MoviesFragment : Fragment() {
         Navigation.findNavController(binding.root).navigate(R.id.goToDetailsFragment)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

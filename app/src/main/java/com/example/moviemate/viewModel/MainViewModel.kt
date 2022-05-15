@@ -6,20 +6,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviemate.model.Movie
 import com.example.moviemate.network.RetrofitInstance
-import com.example.moviemate.view.MovieAdapter
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 class MainViewModel: ViewModel() {
 
+    val page = MutableLiveData(0)
+
     val movieList= MutableLiveData<List<Movie>>()
 
     val selectedMovie = MutableLiveData<Movie>()
 
-    fun getMovies(page: Int, doAfter: () -> Unit) {
+    val loading = MutableLiveData<Boolean>(false)
+
+    val apiCalls = MutableLiveData<Int>(0)
+
+    fun getMovies(doAfter: () -> Unit) {
         viewModelScope.launch {
+            page.value = page.value?.plus(1)
+            apiCalls.value = apiCalls.value?.plus(1)
+            loading.value = true
             val response = try {
-                RetrofitInstance.api.getUpComingMovies(page)
+                RetrofitInstance.api.getUpComingMovies(page.value!!)
             } catch (e: IOException){
                 return@launch
             }
@@ -27,32 +35,27 @@ class MainViewModel: ViewModel() {
                 movieList.value = response.body()!!.results
             }
             Log.d("TAG", "response is successful ? ${response.isSuccessful}")
-            Log.d("TAG", "response code ${response.code()}")
-            Log.d("TAG", "response body ${response.body()}")
-            Log.d("TAG", "response body ${response.body()!!.results.size}")
-            Log.d("TAG", "response body ${response.raw()}")
+            Log.d("TAG", "calls : ${apiCalls.value}")
+            loading.value = false
             doAfter()
-//            binding.RecyclerViewMovie.adapter =
-//                MovieAdapter(viewModel.movieList.value, this@MoviesFragment)
         }
     }
 
     fun searchMovie(search:String, doAfter: () -> Unit) {
         viewModelScope.launch {
+            page.value = page.value?.plus(1)
+            loading.value = true
             val response = try {
-                RetrofitInstance.api.getSpecificMovie(search)
+                RetrofitInstance.api.getSpecificMovie(page.value!!,search)
             } catch (e: IOException){
                 return@launch
             }
             if(response.isSuccessful && response.body()!=null){
                 movieList.value = response.body()!!.results
             }
-            Log.d("TAG", "response code ${response.code()}")
-            Log.d("TAG", "response body ${response.body()}")
-            Log.d("TAG", "response body ${response.raw()}")
+            loading.value = false
             doAfter()
         }
     }
-
 
 }
