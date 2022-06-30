@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/secondaryDarkColor"
+    android:background="@color/primaryDarkColor"
     tools:context=".view.MoviesFragment">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:startIconDrawable="@drawable/ic_baseline_local_movies_24"
-        app:startIconTint="@color/primaryDarkColor"
+        app:startIconTint="@color/white"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:fontFamily="@font/caviar_dreams_bold"
-            android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:hint="@string/search_your_movie"
             android:paddingStart="32dp"

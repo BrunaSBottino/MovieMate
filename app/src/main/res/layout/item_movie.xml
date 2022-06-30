@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    tools:background="@color/secondaryDarkColor">
+    tools:background="@color/primaryLightColor">
 
     <ImageView
         android:id="@+id/poster"
